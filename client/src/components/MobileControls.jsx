@@ -8,6 +8,8 @@ export default function MobileControls() {
   const setMobileActions = useGameStore(state => state.setMobileActions);
   const mobileActions = useGameStore(state => state.mobileActions);
   const hudLayout = useGameStore(state => state.hudLayout);
+  const shootButtonPos = useGameStore(state => state.shootButtonPos);
+  const setShootButtonPos = useGameStore(state => state.setShootButtonPos);
   
   const joystickTouchId = useRef(null);
   const lookTouchId = useRef(null);
@@ -141,6 +143,32 @@ export default function MobileControls() {
     };
   };
 
+  const handleShootDragStart = (e) => {
+    e.stopPropagation();
+    setMobileActions({ shoot: true });
+    // Use look tracking logic to link Aim + Fire
+    lastLookTouch.current = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+  };
+
+  const handleShootDragMove = (e) => {
+    e.stopPropagation();
+    const touch = e.changedTouches[0];
+    if (lastLookTouch.current) {
+      const deltaX = touch.clientX - lastLookTouch.current.x;
+      const deltaY = touch.clientY - lastLookTouch.current.y;
+      setMobileLookDelta({ x: deltaX, y: deltaY });
+      lastLookTouch.current = { x: touch.clientX, y: touch.clientY };
+    }
+    // Update Drag Layout State dynamically as requested 
+    setShootButtonPos({ x: touch.clientX, y: touch.clientY });
+  };
+
+  const handleShootDragEnd = (e) => {
+    e.stopPropagation();
+    setMobileActions({ shoot: false });
+    lastLookTouch.current = null;
+  };
+
   return (
     <>
       {/* Look Area Overlay */}
@@ -159,8 +187,8 @@ export default function MobileControls() {
           position: 'absolute', 
           bottom: `${hudLayout.joystick.bottom}vh`, 
           left: `${hudLayout.joystick.left}vw`, 
-          width: `${hudLayout.joystick.size}vw`, 
-          height: `${hudLayout.joystick.size}vw`, 
+          width: `clamp(70px, ${hudLayout.joystick.size}vw, 130px)`, 
+          height: `clamp(70px, ${hudLayout.joystick.size}vw, 130px)`, 
           background: 'rgba(255, 255, 255, 0.2)',
           borderRadius: '50%',
           zIndex: 20,
@@ -189,13 +217,18 @@ export default function MobileControls() {
 
       {/* Action Buttons */}
       <div 
-        {...createBtnHandler('shoot')}
+        onTouchStart={handleShootDragStart}
+        onTouchMove={handleShootDragMove}
+        onTouchEnd={handleShootDragEnd}
+        onTouchCancel={handleShootDragEnd}
         style={{
           position: 'absolute', 
-          bottom: `${hudLayout.shootBtn.bottom}vh`, 
-          right: `${hudLayout.shootBtn.right}vw`, 
-          width: `${hudLayout.shootBtn.size}vw`, 
-          height: `${hudLayout.shootBtn.size}vw`,
+          left: shootButtonPos ? `${shootButtonPos.x - 30}px` : undefined,
+          top: shootButtonPos ? `${shootButtonPos.y - 30}px` : undefined,
+          bottom: shootButtonPos ? undefined : `${hudLayout.shootBtn.bottom}vh`, 
+          right: shootButtonPos ? undefined : `${hudLayout.shootBtn.right}vw`, 
+          width: `clamp(60px, ${hudLayout.shootBtn.size}vw, 100px)`, 
+          height: `clamp(60px, ${hudLayout.shootBtn.size}vw, 100px)`,
           background: mobileActions.shoot ? 'rgba(255, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)',
           borderRadius: '50%',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -213,8 +246,8 @@ export default function MobileControls() {
           position: 'absolute', 
           bottom: `${hudLayout.reloadBtn.bottom}vh`, 
           right: `${hudLayout.reloadBtn.right}vw`, 
-          width: `${hudLayout.reloadBtn.size}vw`, 
-          height: `${hudLayout.reloadBtn.size}vw`,
+          width: `clamp(45px, ${hudLayout.reloadBtn.size}vw, 80px)`, 
+          height: `clamp(45px, ${hudLayout.reloadBtn.size}vw, 80px)`,
           background: mobileActions.reload ? 'rgba(255, 165, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)',
           borderRadius: '50%',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -232,8 +265,8 @@ export default function MobileControls() {
           position: 'absolute', 
           bottom: `${hudLayout.jumpBtn.bottom}vh`, 
           right: `${hudLayout.jumpBtn.right}vw`, 
-          width: `${hudLayout.jumpBtn.size}vw`, 
-          height: `${hudLayout.jumpBtn.size}vw`,
+          width: `clamp(45px, ${hudLayout.jumpBtn.size}vw, 80px)`, 
+          height: `clamp(45px, ${hudLayout.jumpBtn.size}vw, 80px)`,
           background: mobileActions.jump ? 'rgba(0, 255, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)',
           borderRadius: '50%',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -251,8 +284,8 @@ export default function MobileControls() {
           position: 'absolute', 
           bottom: `${hudLayout.crouchBtn.bottom}vh`, 
           right: `${hudLayout.crouchBtn.right}vw`, 
-          width: `${hudLayout.crouchBtn.size}vw`, 
-          height: `${hudLayout.crouchBtn.size}vw`,
+          width: `clamp(45px, ${hudLayout.crouchBtn.size}vw, 80px)`, 
+          height: `clamp(45px, ${hudLayout.crouchBtn.size}vw, 80px)`,
           background: mobileActions.crouch ? 'rgba(0, 0, 255, 0.6)' : 'rgba(255, 255, 255, 0.3)',
           borderRadius: '50%',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -270,8 +303,8 @@ export default function MobileControls() {
           position: 'absolute', 
           bottom: `${hudLayout.scopeBtn.bottom}vh`, 
           right: `${hudLayout.scopeBtn.right}vw`, 
-          width: `${hudLayout.scopeBtn.size}vw`, 
-          height: `${hudLayout.scopeBtn.size}vw`,
+          width: `clamp(45px, ${hudLayout.scopeBtn.size}vw, 80px)`, 
+          height: `clamp(45px, ${hudLayout.scopeBtn.size}vw, 80px)`,
           background: mobileActions.scope ? 'rgba(255, 255, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)',
           borderRadius: '50%',
           display: 'flex', justifyContent: 'center', alignItems: 'center',

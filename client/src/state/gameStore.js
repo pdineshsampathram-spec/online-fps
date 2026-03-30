@@ -58,6 +58,8 @@ const useGameStore = create((set) => ({
   setMobileMove: (mobileMove) => set({ mobileMove }),
   setMobileLookDelta: (mobileLookDelta) => set({ mobileLookDelta }),
   setMobileActions: (actions) => set(s => ({ mobileActions: { ...s.mobileActions, ...actions } })),
+  shootButtonPos: null,
+  setShootButtonPos: (pos) => set({ shootButtonPos: pos }),
   setSensitivity: (sensitivity) => set({ sensitivity }),
   setShowSettings: (showSettings) => set({ showSettings }),
   setHudLayout: (hudLayout) => set({ hudLayout }),

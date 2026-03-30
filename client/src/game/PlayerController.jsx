@@ -165,10 +165,17 @@ export default function PlayerController() {
         cameraRecoil.current.x += recoilVal; 
         cameraRecoil.current.y += (Math.random() - 0.5) * recoilVal * 0.5; 
         
+        const isMovingNow = (keys.current.w || keys.current.a || keys.current.s || keys.current.d || mobileMove.x !== 0 || mobileMove.y !== 0);
+        const isCrouchingNow = (keys.current.ctrl || keys.current.c || mobileActions.crouch);
+        
+        let currentSpread = weapon.spread || 0.05;
+        if (isMovingNow) currentSpread *= 1.5;
+        if (isCrouchingNow) currentSpread *= 0.7;
+
         const raycaster = new Raycaster();
         const spreadVec = new Vector2(
-          (Math.random() - 0.5) * weapon.spread,
-          (Math.random() - 0.5) * weapon.spread
+          (Math.random() - 0.5) * currentSpread,
+          (Math.random() - 0.5) * currentSpread
         );
         raycaster.setFromCamera(spreadVec, camera);
         

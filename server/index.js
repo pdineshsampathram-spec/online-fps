@@ -138,22 +138,27 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    const roomId = playerToRoom[socket.id];
-    if (roomId && rooms[roomId]) {
-      const room = rooms[roomId];
-      delete room.players[socket.id];
+    try {
+      const roomId = playerToRoom[socket.id];
       delete playerToRoom[socket.id];
-      const remainingPlayers = Object.keys(room.players);
 
-      if (remainingPlayers.length === 0) {
-        delete rooms[roomId];
-      } else {
-        if (room.hostId === socket.id) {
-          room.hostId = remainingPlayers[0];
-          io.to(roomId).emit('roomState', { phase: room.phase, countdown: room.countdown, timer: room.timer, zone: room.zone, hostId: room.hostId });
+      if (roomId && rooms[roomId]) {
+        const room = rooms[roomId];
+        delete room.players[socket.id];
+        
+        const remaining = Object.keys(room.players);
+        if (remaining.length === 0) {
+          delete rooms[roomId];
+        } else {
+          if (room.hostId === socket.id) {
+            room.hostId = remaining[0] || null;
+            io.to(roomId).emit('roomState', { phase: room.phase, countdown: room.countdown, timer: room.timer, zone: room.zone, hostId: room.hostId });
+          }
+          io.to(roomId).emit('playersUpdate', { roomId, players: room.players });
         }
-        io.to(roomId).emit('playersUpdate', { roomId, players: rooms[roomId].players });
       }
+    } catch (e) {
+      console.error("Disconnect cleanup failed cleanly:", e);
     }
   });
 });
