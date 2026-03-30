@@ -27,7 +27,7 @@ const useGameStore = create((set) => ({
   // Mobile controls state
   mobileMove: { x: 0, y: 0 },
   mobileLookDelta: { x: 0, y: 0 },
-  mobileActions: { shoot: false, jump: false, crouch: false },
+  mobileActions: { shoot: false, jump: false, crouch: false, reload: false },
   
   // Settings state
   sensitivity: 0.002,
@@ -35,9 +35,10 @@ const useGameStore = create((set) => ({
   hudLayout: {
     joystick: { bottom: 15, left: 5, size: 30 },
     shootBtn: { bottom: 15, right: 5, size: 20 },
-    jumpBtn: { bottom: 40, right: 5, size: 15 },
+    reloadBtn: { bottom: 38, right: 5, size: 15 },
+    jumpBtn: { bottom: 40, right: 25, size: 15 },
     crouchBtn: { bottom: 15, right: 30, size: 15 },
-    scopeBtn: { bottom: 40, right: 25, size: 15 },
+    scopeBtn: { bottom: 60, right: 25, size: 15 },
   },
   
   effects: [],

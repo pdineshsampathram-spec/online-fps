@@ -122,10 +122,10 @@ export default function MobileControls() {
 
     setJoystickThumb({ x: deltaX, y: deltaY });
 
-    // Normalize -1 to 1 for game move
+    // Normalize -1 to 1 for game move. Forward = negative Z.
     setMobileMove({ 
       x: deltaX / maxRadius, 
-      y: deltaY / maxRadius 
+      y: -deltaY / maxRadius 
     });
   };
 
@@ -205,6 +205,25 @@ export default function MobileControls() {
         }}
       >
         SHOOT
+      </div>
+
+      <div 
+        {...createBtnHandler('reload')}
+        style={{
+          position: 'absolute', 
+          bottom: `${hudLayout.reloadBtn.bottom}vh`, 
+          right: `${hudLayout.reloadBtn.right}vw`, 
+          width: `${hudLayout.reloadBtn.size}vw`, 
+          height: `${hudLayout.reloadBtn.size}vw`,
+          background: mobileActions.reload ? 'rgba(255, 165, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)',
+          borderRadius: '50%',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          fontWeight: 'bold', fontSize: '0.8rem', color: 'white',
+          zIndex: 20,
+          userSelect: 'none', touchAction: 'none', pointerEvents: 'auto'
+        }}
+      >
+        RELOAD
       </div>
 
       <div 

@@ -89,7 +89,7 @@ io.on('connection', (socket) => {
       if (p.health > 0) {
         p.position = data.position;
         p.rotation = data.rotation;
-        socket.to(roomId).emit('playerMoved', { id: socket.id, ...data });
+        // Broadcasts are now handled safely in the 20 TPS master loop instead of per-frame spam
       }
     }
   });
@@ -234,6 +234,15 @@ setInterval(() => {
     }
   }
 }, 1000);
+
+// Natively optimized 20 TPS authoritative positional state syncing!
+setInterval(() => {
+  for (const roomId in rooms) {
+    if (rooms[roomId] && rooms[roomId].phase === 'playing') {
+      io.to(roomId).emit('playersUpdate', { roomId, players: rooms[roomId].players });
+    }
+  }
+}, 50);
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {

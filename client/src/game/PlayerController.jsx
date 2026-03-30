@@ -143,6 +143,15 @@ export default function PlayerController() {
   const lastSync = useRef(0);
 
   useFrame((state, delta) => {
+    // Auto Reload System
+    if (ammoArr[weaponIdx] <= 0 && !isReloading.current) {
+       reload();
+    }
+    // Mobile manual reload hook
+    if (mobileActions.reload && !isReloading.current && ammoArr[weaponIdx] < weapon.magSize) {
+       reload();
+    }
+
     const isShootingVal = isShooting.current || mobileActions.shoot;
     if (isShootingVal && matchPhase === 'playing' && !isReloading.current && ammoArr[weaponIdx] > 0 && !isDead) {
       const now = Date.now();

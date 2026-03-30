@@ -1,8 +1,9 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 // import { useGLTF } from '@react-three/drei'; // Uncomment when loading real GLB files!
+import { MathUtils, Vector3 } from 'three';
 
-export default function Player({ position, rotation, state, color = "#ff0000", id, isLocal = false }) {
+export default function Player({ position, rotation, state, color = "#ff0000", id, isLocal = false, health = 100 }) {
   const groupRef = useRef();
   const bodyRef = useRef();
   const headRef = useRef();
@@ -25,10 +26,16 @@ export default function Player({ position, rotation, state, color = "#ff0000", i
   useFrame((_, delta) => {
     if (!groupRef.current) return;
 
+    if (health <= 0) {
+      groupRef.current.rotation.x = MathUtils.lerp(groupRef.current.rotation.x, -Math.PI / 2, 0.1);
+    } else {
+      groupRef.current.rotation.x = MathUtils.lerp(groupRef.current.rotation.x, 0, 0.1);
+    }
+
     // Direct Position sync naturally handling multiplayer interpolation optionally
     groupRef.current.position.lerp(
-      { x: position.x, y: position.y, z: position.z },
-      0.3
+      new Vector3(position.x, position.y, position.z),
+      0.2
     );
 
     // Direct Yaw Sync cleanly applying network orientation
