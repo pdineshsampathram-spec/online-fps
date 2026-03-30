@@ -2,8 +2,19 @@ import { io } from 'socket.io-client';
 import useGameStore from '../state/gameStore';
 import { playSound } from '../game/SoundSystem';
 
-const SOCKET_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const defaultUrl = isLocal ? 'http://localhost:3001' : 'https://online-fps.onrender.com';
+const SOCKET_URL = import.meta.env.VITE_SERVER_URL || defaultUrl;
+
 export const socket = io(SOCKET_URL, { autoConnect: false });
+
+socket.on("connect", () => {
+  console.log("Connected:", socket.id, "to server:", SOCKET_URL);
+});
+
+socket.on("connect_error", (err) => {
+  console.error("Connection error:", err.message);
+});
 
 export const connectAndCreate = () => { socket.connect(); socket.emit('createRoom'); };
 export const connectAndJoin = (roomId) => { socket.connect(); socket.emit('joinRoom', roomId); };
