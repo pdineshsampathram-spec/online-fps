@@ -105,7 +105,8 @@ export default function PlayerController() {
     };
 
     const handleMouseDown = (e) => {
-      if (document.pointerLockElement !== gl.domElement) {
+      const isMobile = 'ontouchstart' in window;
+      if (!isMobile && document.pointerLockElement !== gl.domElement) {
         gl.domElement.requestPointerLock();
       } else { 
         if (e.button === 0) isShooting.current = true;

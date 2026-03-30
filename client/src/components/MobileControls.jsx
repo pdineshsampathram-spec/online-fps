@@ -131,7 +131,11 @@ export default function MobileControls() {
 
   const createBtnHandler = (action) => {
     return {
-      onTouchStart: (e) => { e.stopPropagation(); setMobileActions({ [action]: true }); },
+      onTouchStart: (e) => { 
+        e.stopPropagation(); 
+        console.log("TOUCH WORKING:", action); 
+        setMobileActions({ [action]: true }); 
+      },
       onTouchEnd: (e) => { e.stopPropagation(); setMobileActions({ [action]: false }); },
       onTouchCancel: (e) => { e.stopPropagation(); setMobileActions({ [action]: false }); }
     };
@@ -141,7 +145,7 @@ export default function MobileControls() {
     <>
       {/* Look Area Overlay */}
       <div 
-        style={{ position: 'absolute', top: 0, right: 0, width: '50vw', height: '100vh', zIndex: 10 }}
+        style={{ position: 'absolute', top: 0, right: 0, width: '50vw', height: '100vh', zIndex: 10, pointerEvents: 'auto' }}
         onTouchStart={handleLookStart}
         onTouchMove={handleLookMove}
         onTouchEnd={handleLookEnd}
@@ -160,7 +164,8 @@ export default function MobileControls() {
           background: 'rgba(255, 255, 255, 0.2)',
           borderRadius: '50%',
           zIndex: 20,
-          touchAction: 'none'
+          touchAction: 'none',
+          pointerEvents: 'auto'
         }}
         onTouchStart={handleJoystickStart}
         onTouchMove={handleJoystickMove}
@@ -196,7 +201,7 @@ export default function MobileControls() {
           display: 'flex', justifyContent: 'center', alignItems: 'center',
           fontWeight: 'bold', fontSize: '1rem', color: 'white',
           zIndex: 20,
-          userSelect: 'none', touchAction: 'none'
+          userSelect: 'none', touchAction: 'none', pointerEvents: 'auto'
         }}
       >
         SHOOT
@@ -215,7 +220,7 @@ export default function MobileControls() {
           display: 'flex', justifyContent: 'center', alignItems: 'center',
           fontWeight: 'bold', fontSize: '0.9rem', color: 'white',
           zIndex: 20,
-          userSelect: 'none', touchAction: 'none'
+          userSelect: 'none', touchAction: 'none', pointerEvents: 'auto'
         }}
       >
         JUMP
@@ -234,7 +239,7 @@ export default function MobileControls() {
           display: 'flex', justifyContent: 'center', alignItems: 'center',
           fontWeight: 'bold', fontSize: '0.8rem', color: 'white',
           zIndex: 20,
-          userSelect: 'none', touchAction: 'none'
+          userSelect: 'none', touchAction: 'none', pointerEvents: 'auto'
         }}
       >
         CROUCH
@@ -253,7 +258,7 @@ export default function MobileControls() {
           display: 'flex', justifyContent: 'center', alignItems: 'center',
           fontWeight: 'bold', fontSize: '0.8rem', color: 'black',
           zIndex: 20,
-          userSelect: 'none', touchAction: 'none'
+          userSelect: 'none', touchAction: 'none', pointerEvents: 'auto'
         }}
       >
         AIM
