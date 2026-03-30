@@ -1,0 +1,111 @@
+import { create } from 'zustand';
+
+const useGameStore = create((set) => ({
+  isPlaying: false,
+  myId: null,
+  roomId: null,
+  hostId: null,
+  health: 100,
+  kills: 0,
+  players: {}, 
+  isTPP: false,
+  isDead: false,
+  localPlayerPos: null,
+
+  matchPhase: 'waiting', 
+  countdown: 0,
+  matchTimer: 120,
+  restartTimer: 15,
+  zone: null,
+  winner: null,
+  
+  weaponIndex: 0,
+  ammo: 30,
+  isReloading: false,
+  isZooming: false,
+  
+  // Mobile controls state
+  mobileMove: { x: 0, y: 0 },
+  mobileLookDelta: { x: 0, y: 0 },
+  mobileActions: { shoot: false, jump: false, crouch: false },
+  
+  // Settings state
+  sensitivity: 0.002,
+  showSettings: false,
+  hudLayout: {
+    joystick: { bottom: 40, left: 40, size: 120 },
+    shootBtn: { bottom: 40, right: 40, size: 80 },
+    jumpBtn: { bottom: 130, right: 40, size: 60 },
+    crouchBtn: { bottom: 40, right: 130, size: 60 },
+    scopeBtn: { bottom: 130, right: 110, size: 60 },
+  },
+  
+  effects: [],
+  hitMarkerOpacity: 0,
+  hitMarkerColor: 'white',
+  damageFlashOpacity: 0,
+
+  setIsPlaying: (isPlaying) => set({ isPlaying }),
+  setMyId: (myId) => set({ myId }),
+  setRoomId: (roomId) => set({ roomId }),
+  setHealth: (health) => set({ health }),
+  setKills: (kills) => set({ kills }),
+  setPlayers: (players) => set({ players }),
+  setIsTPP: (isTPP) => set({ isTPP }),
+  setIsDead: (isDead) => set({ isDead }),
+  
+  setMobileMove: (mobileMove) => set({ mobileMove }),
+  setMobileLookDelta: (mobileLookDelta) => set({ mobileLookDelta }),
+  setMobileActions: (actions) => set(s => ({ mobileActions: { ...s.mobileActions, ...actions } })),
+  setSensitivity: (sensitivity) => set({ sensitivity }),
+  setShowSettings: (showSettings) => set({ showSettings }),
+  setHudLayout: (hudLayout) => set({ hudLayout }),
+  
+  updateRoomState: (data) => set({ 
+    matchPhase: data.phase, 
+    countdown: data.countdown, 
+    matchTimer: data.timer, 
+    zone: data.zone, 
+    winner: data.winner, 
+    restartTimer: data.restartTimer,
+    hostId: data.hostId || null
+  }),
+
+  triggerHitMarker: (isHeadshot) => {
+    set({ hitMarkerOpacity: 1, hitMarkerColor: isHeadshot ? 'red' : 'white' });
+    setTimeout(() => set({ hitMarkerOpacity: 0 }), 150);
+  },
+  triggerDamageFlash: () => {
+    set({ damageFlashOpacity: 0.5 });
+    setTimeout(() => set({ damageFlashOpacity: 0 }), 300);
+  },
+
+  addEffect: (effect) => set(s => ({ effects: [...s.effects, { id: Date.now() + Math.random(), ...effect }] })),
+  removeEffect: (id) => set(s => ({ effects: s.effects.filter(e => e.id !== id) })),
+  
+  updatePlayerPosition: (id, position, rotation) => set((state) => {
+    if (!state.players[id]) return state; 
+    return {
+      players: {
+        ...state.players,
+        [id]: { ...state.players[id], position, rotation }
+      }
+    };
+  }),
+
+  // Advanced Disconnect Restorer mapping states directly securely globally seamlessly
+  resetStore: () => set({
+    isPlaying: false,
+    myId: null,
+    roomId: null,
+    hostId: null,
+    health: 100,
+    kills: 0,
+    players: {},
+    isDead: false,
+    matchPhase: 'waiting',
+    isZooming: false
+  })
+}));
+
+export default useGameStore;
