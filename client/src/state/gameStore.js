@@ -30,7 +30,7 @@ const useGameStore = create((set) => ({
   mobileActions: { shoot: false, jump: false, crouch: false, reload: false },
   
   // Settings state
-  sensitivity: 0.002,
+  sensitivity: 0.008,
   showSettings: false,
   hudLayout: {
     joystick: { bottom: 15, left: 5, size: 30 },

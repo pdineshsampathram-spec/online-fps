@@ -167,6 +167,7 @@ export default function MobileControls() {
     e.stopPropagation();
     setMobileActions({ shoot: false });
     lastLookTouch.current = null;
+    setShootButtonPos(null); // Instantly snap back to default layout natively!
   };
 
   return (

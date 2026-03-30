@@ -27,9 +27,13 @@ export default function Player({ position, rotation, state, color = "#ff0000", i
     if (!groupRef.current) return;
 
     if (health <= 0) {
-      groupRef.current.rotation.x = MathUtils.lerp(groupRef.current.rotation.x, -Math.PI / 2, 0.1);
+      groupRef.current.rotation.x = Math.max(-Math.PI / 2, groupRef.current.rotation.x - delta * 4);
+      if (groupRef.current.rotation.x <= -Math.PI / 2 + 0.1) {
+         groupRef.current.scale.lerp(new Vector3(0, 0, 0), delta * 3);
+      }
     } else {
-      groupRef.current.rotation.x = MathUtils.lerp(groupRef.current.rotation.x, 0, 0.1);
+      groupRef.current.rotation.x = MathUtils.lerp(groupRef.current.rotation.x, 0, delta * 5);
+      groupRef.current.scale.lerp(new Vector3(1, 1, 1), delta * 5);
     }
 
     // Direct Position sync naturally handling multiplayer interpolation optionally

@@ -40,6 +40,7 @@ export default function PlayerController() {
   
   const currentEyeHeight = useRef(1.6);
   const isZoomingRef = useRef(false);
+  const screenShake = useRef(0);
   
   const weaponRef = useRef();
   const bobTime = useRef(0);
@@ -160,6 +161,8 @@ export default function PlayerController() {
         
         playSound('shoot');
         setAmmoArr(prev => { const n = [...prev]; n[weaponIdx] -= 1; return n; });
+        
+        screenShake.current = 0.03; // Real game feel shot bump!
         
         const recoilVal = weapon.recoil;
         cameraRecoil.current.x += recoilVal; 
@@ -298,14 +301,15 @@ export default function PlayerController() {
     currentEyeHeight.current = MathUtils.lerp(currentEyeHeight.current, targetEyeHeight, 15 * delta);
     
     // Smooth camera visual recoil lerping natively decoupling matrices logically
-    cameraRecoil.current.lerp(new Vector2(0, 0), 8 * delta);
+    cameraRecoil.current.lerp(new Vector2(0, 0), 12 * delta); // Faster exponential decay like real games natively
+    screenShake.current = MathUtils.lerp(screenShake.current, 0, 15 * delta);
     
-    // Apply mobile look delta
+    // Apply mobile look delta limits natively restricting pitch globally
     if (mobileLookDelta.x !== 0 || mobileLookDelta.y !== 0) {
       euler.current.y -= mobileLookDelta.x * sensitivityStore;
       euler.current.x -= mobileLookDelta.y * sensitivityStore;
       euler.current.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.current.x));
-      setMobileLookDelta({ x: 0, y: 0 }); // reset after applying
+      setMobileLookDelta({ x: 0, y: 0 }); 
     }
 
     const targetEuler = euler.current.clone();
@@ -318,15 +322,28 @@ export default function PlayerController() {
     const targetFov = isZoomingActive && weapon.zoomFov ? weapon.zoomFov : 75;
     camera.fov = MathUtils.lerp(camera.fov, targetFov, 12 * delta);
     camera.updateProjectionMatrix();
+
+    // Natural Camera Sway
+    const isMovingInput = keys.current.w || keys.current.a || keys.current.s || keys.current.d || mobileMove.x !== 0 || mobileMove.y !== 0;
+    const sway = (canMove && isMovingInput && isGrounded.current) ? (Math.sin(Date.now() * 0.015) * 0.01) : 0;
+    targetEuler.z = MathUtils.lerp(targetEuler.z || 0, sway, 10 * delta);
     
+    // Screen Shot Shake Hook
+    const camShakeOffX = (Math.random() - 0.5) * screenShake.current;
+    const camShakeOffY = (Math.random() - 0.5) * screenShake.current;
+
     if (isTPP) {
       const offset = new Vector3(0, currentEyeHeight.current + 1, 4);
       offset.applyEuler(new Euler(0, euler.current.y, 0));
       camera.position.copy(playerPos.current).add(offset);
+      camera.position.x += camShakeOffX;
+      camera.position.y += camShakeOffY;
       camera.quaternion.setFromEuler(targetEuler);
     } else {
       camera.position.copy(playerPos.current);
       camera.position.y += currentEyeHeight.current;
+      camera.position.x += camShakeOffX;
+      camera.position.y += camShakeOffY;
       camera.quaternion.setFromEuler(targetEuler);
     }
 
@@ -351,8 +368,7 @@ export default function PlayerController() {
         }
         
         // Walking Bobbing Anim Hooks
-        const isMovingInput = keys.current.w || keys.current.a || keys.current.s || keys.current.d || mobileMove.x !== 0 || mobileMove.y !== 0;
-        if (canMove && isMovingInput) {
+        if (canMove && isMovingInput && isGrounded.current) {
           bobTime.current += delta * (weapon.name==='SMG' ? 20 : 15);
           weaponRef.current.translateY(Math.sin(bobTime.current) * 0.03); 
           weaponRef.current.rotateZ(Math.cos(bobTime.current) * 0.01);
