@@ -33,11 +33,11 @@ const useGameStore = create((set) => ({
   sensitivity: 0.002,
   showSettings: false,
   hudLayout: {
-    joystick: { bottom: 40, left: 40, size: 120 },
-    shootBtn: { bottom: 40, right: 40, size: 80 },
-    jumpBtn: { bottom: 130, right: 40, size: 60 },
-    crouchBtn: { bottom: 40, right: 130, size: 60 },
-    scopeBtn: { bottom: 130, right: 110, size: 60 },
+    joystick: { bottom: 15, left: 5, size: 30 },
+    shootBtn: { bottom: 15, right: 5, size: 20 },
+    jumpBtn: { bottom: 40, right: 5, size: 15 },
+    crouchBtn: { bottom: 15, right: 30, size: 15 },
+    scopeBtn: { bottom: 40, right: 25, size: 15 },
   },
   
   effects: [],

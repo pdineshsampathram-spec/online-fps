@@ -72,6 +72,7 @@ function ParticleBurst({ position, color, particleCount, gravity, lifespan, onDo
 export default function Effects() {
   const effects = useGameStore(state => state.effects);
   const removeEffect = useGameStore(state => state.removeEffect);
+  const isMobile = 'ontouchstart' in window;
 
   return (
     <group>
@@ -80,10 +81,10 @@ export default function Effects() {
           return <Tracer key={eff.id} start={eff.start} end={eff.end} onDone={() => removeEffect(eff.id)} />;
         }
         if (eff.type === 'blood') {
-          return <ParticleBurst key={eff.id} position={eff.position} color="#cc0000" particleCount={15} gravity={25} lifespan={0.4} onDone={() => removeEffect(eff.id)} />;
+          return <ParticleBurst key={eff.id} position={eff.position} color="#cc0000" particleCount={isMobile ? 5 : 15} gravity={25} lifespan={0.4} onDone={() => removeEffect(eff.id)} />;
         }
         if (eff.type === 'spark') {
-          return <ParticleBurst key={eff.id} position={eff.position} color="#ffff00" particleCount={8} gravity={10} lifespan={0.2} onDone={() => removeEffect(eff.id)} />;
+          return <ParticleBurst key={eff.id} position={eff.position} color="#ffff00" particleCount={isMobile ? 3 : 8} gravity={10} lifespan={0.2} onDone={() => removeEffect(eff.id)} />;
         }
         return null;
       })}

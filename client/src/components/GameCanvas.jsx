@@ -7,7 +7,7 @@ export default function GameCanvas() {
   return (
     <>
       <Suspense fallback={<div style={{ color: 'white', position: 'absolute', padding: 20 }}>Loading 3D Scene...</div>}>
-        <Canvas shadows camera={{ fov: 75, near: 0.1, far: 1000 }} style={{ background: '#87CEEB', display: 'block' }}>
+        <Canvas shadows camera={{ fov: 75, near: 0.1, far: 1000 }} style={{ background: '#87CEEB', display: 'block', width: '100vw', height: '100vh', touchAction: 'none' }}>
           <ambientLight intensity={0.5} />
           <directionalLight castShadow position={[10, 20, 10]} intensity={1.5} shadow-mapSize={[1024, 1024]} />
           

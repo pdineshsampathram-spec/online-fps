@@ -7,10 +7,16 @@
 body, html, #root {
   width: 100vw;
   height: 100vh;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
   background-color: #1a1a2e;
   color: white;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .lobby {

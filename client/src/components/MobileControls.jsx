@@ -153,10 +153,10 @@ export default function MobileControls() {
         id="joystick-base"
         style={{ 
           position: 'absolute', 
-          bottom: `${hudLayout.joystick.bottom}px`, 
-          left: `${hudLayout.joystick.left}px`, 
-          width: `${hudLayout.joystick.size}px`, 
-          height: `${hudLayout.joystick.size}px`, 
+          bottom: `${hudLayout.joystick.bottom}vh`, 
+          left: `${hudLayout.joystick.left}vw`, 
+          width: `${hudLayout.joystick.size}vw`, 
+          height: `${hudLayout.joystick.size}vw`, 
           background: 'rgba(255, 255, 255, 0.2)',
           borderRadius: '50%',
           zIndex: 20,
@@ -187,10 +187,10 @@ export default function MobileControls() {
         {...createBtnHandler('shoot')}
         style={{
           position: 'absolute', 
-          bottom: `${hudLayout.shootBtn.bottom}px`, 
-          right: `${hudLayout.shootBtn.right}px`, 
-          width: `${hudLayout.shootBtn.size}px`, 
-          height: `${hudLayout.shootBtn.size}px`,
+          bottom: `${hudLayout.shootBtn.bottom}vh`, 
+          right: `${hudLayout.shootBtn.right}vw`, 
+          width: `${hudLayout.shootBtn.size}vw`, 
+          height: `${hudLayout.shootBtn.size}vw`,
           background: mobileActions.shoot ? 'rgba(255, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)',
           borderRadius: '50%',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -206,10 +206,10 @@ export default function MobileControls() {
         {...createBtnHandler('jump')}
         style={{
           position: 'absolute', 
-          bottom: `${hudLayout.jumpBtn.bottom}px`, 
-          right: `${hudLayout.jumpBtn.right}px`, 
-          width: `${hudLayout.jumpBtn.size}px`, 
-          height: `${hudLayout.jumpBtn.size}px`,
+          bottom: `${hudLayout.jumpBtn.bottom}vh`, 
+          right: `${hudLayout.jumpBtn.right}vw`, 
+          width: `${hudLayout.jumpBtn.size}vw`, 
+          height: `${hudLayout.jumpBtn.size}vw`,
           background: mobileActions.jump ? 'rgba(0, 255, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)',
           borderRadius: '50%',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -225,10 +225,10 @@ export default function MobileControls() {
         {...createBtnHandler('crouch')}
         style={{
           position: 'absolute', 
-          bottom: `${hudLayout.crouchBtn.bottom}px`, 
-          right: `${hudLayout.crouchBtn.right}px`, 
-          width: `${hudLayout.crouchBtn.size}px`, 
-          height: `${hudLayout.crouchBtn.size}px`,
+          bottom: `${hudLayout.crouchBtn.bottom}vh`, 
+          right: `${hudLayout.crouchBtn.right}vw`, 
+          width: `${hudLayout.crouchBtn.size}vw`, 
+          height: `${hudLayout.crouchBtn.size}vw`,
           background: mobileActions.crouch ? 'rgba(0, 0, 255, 0.6)' : 'rgba(255, 255, 255, 0.3)',
           borderRadius: '50%',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -244,10 +244,10 @@ export default function MobileControls() {
         {...createBtnHandler('scope')}
         style={{
           position: 'absolute', 
-          bottom: `${hudLayout.scopeBtn.bottom}px`, 
-          right: `${hudLayout.scopeBtn.right}px`, 
-          width: `${hudLayout.scopeBtn.size}px`, 
-          height: `${hudLayout.scopeBtn.size}px`,
+          bottom: `${hudLayout.scopeBtn.bottom}vh`, 
+          right: `${hudLayout.scopeBtn.right}vw`, 
+          width: `${hudLayout.scopeBtn.size}vw`, 
+          height: `${hudLayout.scopeBtn.size}vw`,
           background: mobileActions.scope ? 'rgba(255, 255, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)',
           borderRadius: '50%',
           display: 'flex', justifyContent: 'center', alignItems: 'center',

@@ -52,12 +52,12 @@ export default function SettingsPanel() {
               <div key={prop} style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
                 <span style={{ width: '80px' }}>{prop}</span>
                 <input 
-                  type="range" min="0" max={prop === 'size' ? 300 : 1000} step="5" 
+                  type="range" min="0" max="100" step="1" 
                   value={val}
                   onChange={(e) => updateLayout(btnKey, prop, e.target.value)}
                   style={{ flex: 1, margin: '0 10px' }}
                 />
-                <span style={{ width: '40px', textAlign: 'right' }}>{val}px</span>
+                <span style={{ width: '40px', textAlign: 'right' }}>{val}%</span>
               </div>
             ))}
           </div>
